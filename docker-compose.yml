@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: creative-map-db
+    environment:
+      POSTGRES_DB: creative_map
+      POSTGRES_USER: creative_map
+      POSTGRES_PASSWORD: creative_map_secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
