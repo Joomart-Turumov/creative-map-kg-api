@@ -33,6 +33,10 @@ public class Event {
     @Column(name = "end_date")
     private LocalDateTime endDate;
 
+    @Builder.Default
+    @Column(nullable = false)
+    private Boolean free = false;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
