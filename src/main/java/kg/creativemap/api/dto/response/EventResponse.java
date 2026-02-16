@@ -21,4 +21,5 @@ public class EventResponse {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private boolean free;
+    private String category;
 }

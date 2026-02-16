@@ -37,6 +37,11 @@ public class Event {
     @Column(nullable = false)
     private Boolean free = false;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Builder.Default
+    private EventCategory category = EventCategory.MUSEUM;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 

@@ -25,6 +25,12 @@ public class EventController {
         return ResponseEntity.ok(ApiResponse.ok(result));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<EventResponse>> getEvent(@PathVariable Long id) {
+        EventResponse event = eventService.getEvent(id);
+        return ResponseEntity.ok(ApiResponse.ok(event));
+    }
+
     @GetMapping("/upcoming")
     public ResponseEntity<ApiResponse<List<EventResponse>>> getUpcomingEvents() {
         List<EventResponse> events = eventService.getUpcomingEvents();

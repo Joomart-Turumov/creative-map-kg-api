@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/creative_map
-    username: creative_map
-    password: creative_map_secret
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/creative_map}
+    username: ${DATABASE_USERNAME:creative_map}
+    password: ${DATABASE_PASSWORD:creative_map_secret}
     driver-class-name: org.postgresql.Driver
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect

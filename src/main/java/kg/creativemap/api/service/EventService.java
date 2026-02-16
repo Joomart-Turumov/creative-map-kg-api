@@ -11,6 +11,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import kg.creativemap.api.exception.ResourceNotFoundException;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,6 +22,12 @@ public class EventService {
 
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
+
+    public EventResponse getEvent(Long id) {
+        Event event = eventRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found: " + id));
+        return eventMapper.toResponse(event);
+    }
 
     public List<EventResponse> getUpcomingEvents() {
         List<Event> events = eventRepository.findByStartDateAfterOrderByStartDateAsc(LocalDateTime.now());
