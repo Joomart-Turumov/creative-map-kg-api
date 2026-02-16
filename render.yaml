@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: creative-map-kg-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: creative-map-db
+          property: connectionURI
+      - key: DATABASE_USERNAME
+        fromDatabase:
+          name: creative-map-db
+          property: user
+      - key: DATABASE_PASSWORD
+        fromDatabase:
+          name: creative-map-db
+          property: password
+      - key: JWT_SECRET
+        value: MySecretKeyForJWT2026CreativeMapKG1234567890SecureKey
+      - key: CORS_ORIGINS
+        value: https://creative-map-kg.vercel.app
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+
+databases:
+  - name: creative-map-db
+    plan: free
+    databaseName: creative_map
