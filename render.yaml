@@ -5,10 +5,18 @@ services:
     dockerfilePath: ./Dockerfile
     plan: free
     envVars:
-      - key: DATABASE_URL
+      - key: DATABASE_HOST
         fromDatabase:
           name: creative-map-db
-          property: connectionURI
+          property: host
+      - key: DATABASE_PORT
+        fromDatabase:
+          name: creative-map-db
+          property: port
+      - key: DATABASE_NAME
+        fromDatabase:
+          name: creative-map-db
+          property: database
       - key: DATABASE_USERNAME
         fromDatabase:
           name: creative-map-db
