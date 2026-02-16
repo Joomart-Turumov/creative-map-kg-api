@@ -1,0 +1,42 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.6)
+
+2026-02-13T13:09:59.632+03:00  INFO 21004 --- [creative-map-kg-api] [           main] k.c.api.CreativeMapApiApplication        : Starting CreativeMapApiApplication v0.0.1-SNAPSHOT using Java 17.0.18 with PID 21004 (C:\Users\Жоомарт\desktop\creative-map-kg-api\target\creative-map-kg-api-0.0.1-SNAPSHOT.jar started by Жоомарт in C:\Users\Жоомарт\desktop\creative-map-kg-api)
+2026-02-13T13:09:59.638+03:00  INFO 21004 --- [creative-map-kg-api] [           main] k.c.api.CreativeMapApiApplication        : The following 1 profile is active: "dev"
+2026-02-13T13:10:03.118+03:00  INFO 21004 --- [creative-map-kg-api] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-02-13T13:10:03.321+03:00  INFO 21004 --- [creative-map-kg-api] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 176 ms. Found 5 JPA repository interfaces.
+2026-02-13T13:10:05.847+03:00  INFO 21004 --- [creative-map-kg-api] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-02-13T13:10:05.890+03:00  INFO 21004 --- [creative-map-kg-api] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-02-13T13:10:05.890+03:00  INFO 21004 --- [creative-map-kg-api] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.33]
+2026-02-13T13:10:06.563+03:00  INFO 21004 --- [creative-map-kg-api] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-02-13T13:10:06.565+03:00  INFO 21004 --- [creative-map-kg-api] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 6805 ms
+2026-02-13T13:10:06.747+03:00  INFO 21004 --- [creative-map-kg-api] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-02-13T13:10:07.661+03:00  INFO 21004 --- [creative-map-kg-api] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:file:./data/creative_map user=SA
+2026-02-13T13:10:07.661+03:00  INFO 21004 --- [creative-map-kg-api] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-02-13T13:10:07.676+03:00  INFO 21004 --- [creative-map-kg-api] [           main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:file:./data/creative_map'
+2026-02-13T13:10:08.586+03:00  INFO 21004 --- [creative-map-kg-api] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:h2:file:./data/creative_map (H2 2.2)
+2026-02-13T13:10:08.622+03:00  WARN 21004 --- [creative-map-kg-api] [           main] o.f.c.internal.database.base.Database    : Flyway upgrade recommended: H2 2.2.224 is newer than this version of Flyway and support has not been tested. The latest supported version of H2 is 2.2.220.
+2026-02-13T13:10:08.776+03:00  INFO 21004 --- [creative-map-kg-api] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 9 migrations (execution time 00:00.116s)
+2026-02-13T13:10:08.807+03:00  INFO 21004 --- [creative-map-kg-api] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "PUBLIC": 9
+2026-02-13T13:10:08.816+03:00  INFO 21004 --- [creative-map-kg-api] [           main] o.f.core.internal.command.DbMigrate      : Schema "PUBLIC" is up to date. No migration necessary.
+2026-02-13T13:10:09.109+03:00  INFO 21004 --- [creative-map-kg-api] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-02-13T13:10:09.501+03:00  INFO 21004 --- [creative-map-kg-api] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2026-02-13T13:10:09.590+03:00  INFO 21004 --- [creative-map-kg-api] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-02-13T13:10:10.233+03:00  INFO 21004 --- [creative-map-kg-api] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-02-13T13:10:10.341+03:00  WARN 21004 --- [creative-map-kg-api] [           main] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-02-13T13:10:12.399+03:00  INFO 21004 --- [creative-map-kg-api] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-02-13T13:10:12.436+03:00  INFO 21004 --- [creative-map-kg-api] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-02-13T13:10:13.727+03:00  INFO 21004 --- [creative-map-kg-api] [           main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-02-13T13:10:15.920+03:00  WARN 21004 --- [creative-map-kg-api] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-02-13T13:10:18.049+03:00  INFO 21004 --- [creative-map-kg-api] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2026-02-13T13:10:18.111+03:00  INFO 21004 --- [creative-map-kg-api] [           main] k.c.api.CreativeMapApiApplication        : Started CreativeMapApiApplication in 19.752 seconds (process running for 21.36)
+2026-02-13T13:10:23.528+03:00  INFO 21004 --- [creative-map-kg-api] [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-02-13T13:10:23.528+03:00  INFO 21004 --- [creative-map-kg-api] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-02-13T13:10:23.528+03:00  INFO 21004 --- [creative-map-kg-api] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
