@@ -3,6 +3,7 @@ package kg.creativemap.api.config;
 import kg.creativemap.api.security.JwtAuthFilter;
 import kg.creativemap.api.security.JwtEntryPoint;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -27,6 +28,12 @@ public class SecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
     private final JwtEntryPoint jwtEntryPoint;
 
+    @Value("${app.swagger.enabled:false}")
+    private boolean swaggerEnabled;
+
+    @Value("${app.h2-console.enabled:false}")
+    private boolean h2ConsoleEnabled;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -35,14 +42,24 @@ public class SecurityConfig {
             .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
             .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtEntryPoint))
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/v1/auth/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/v1/places/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/v1/events/**").permitAll()
-                .requestMatchers("/swagger-ui/**", "/api-docs/**", "/swagger-ui.html").permitAll()
-                .requestMatchers("/h2-console/**").permitAll()
-                .anyRequest().authenticated()
-            )
+            .authorizeHttpRequests(auth -> {
+                auth
+                    .requestMatchers("/api/v1/auth/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/v1/places/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/v1/events/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/v1/vr-tours/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/v1/reviews/place/**").permitAll()
+                    .requestMatchers("/api/v1/admin/**").authenticated();
+
+                if (swaggerEnabled) {
+                    auth.requestMatchers("/swagger-ui/**", "/api-docs/**", "/swagger-ui.html").permitAll();
+                }
+                if (h2ConsoleEnabled) {
+                    auth.requestMatchers("/h2-console/**").permitAll();
+                }
+
+                auth.anyRequest().authenticated();
+            })
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

@@ -42,11 +42,24 @@ public class Event {
     @Builder.Default
     private EventCategory category = EventCategory.MUSEUM;
 
+    @Builder.Default
+    @Column(nullable = false)
+    private Boolean active = true;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 }

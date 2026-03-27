@@ -1,6 +1,7 @@
 package kg.creativemap.api.controller;
 
 import jakarta.validation.Valid;
+import kg.creativemap.api.dto.request.UpdateSettingsRequest;
 import kg.creativemap.api.dto.request.UpdateUserRequest;
 import kg.creativemap.api.dto.response.ApiResponse;
 import kg.creativemap.api.dto.response.UserResponse;
@@ -30,5 +31,13 @@ public class UserController {
             @Valid @RequestBody UpdateUserRequest request) {
         UserResponse response = userService.updateUser(user, request);
         return ResponseEntity.ok(ApiResponse.ok(response, "Профиль обновлён"));
+    }
+
+    @PutMapping("/me/settings")
+    public ResponseEntity<ApiResponse<UserResponse>> updateSettings(
+            @AuthenticationPrincipal User user,
+            @Valid @RequestBody UpdateSettingsRequest request) {
+        UserResponse response = userService.updateSettings(user, request);
+        return ResponseEntity.ok(ApiResponse.ok(response, "Настройки сохранены"));
     }
 }

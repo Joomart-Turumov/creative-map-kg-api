@@ -41,3 +41,6 @@ Thumbs.db
 
 ### Database ###
 data/
+app.log
+data/
+target/

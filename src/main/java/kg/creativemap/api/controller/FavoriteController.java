@@ -44,4 +44,12 @@ public class FavoriteController {
         favoriteService.removeFavorite(user, placeId);
         return ResponseEntity.ok(ApiResponse.ok(null, "Удалено из избранного"));
     }
+
+    @GetMapping("/check/{placeId}")
+    public ResponseEntity<ApiResponse<Boolean>> checkFavorite(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long placeId) {
+        boolean isFavorite = favoriteService.isFavorite(user, placeId);
+        return ResponseEntity.ok(ApiResponse.ok(isFavorite));
+    }
 }

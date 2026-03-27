@@ -26,7 +26,7 @@ public class FavoriteService {
 
     @Transactional(readOnly = true)
     public List<FavoriteResponse> getFavorites(User user) {
-        return favoriteRepository.findByUserId(user.getId()).stream()
+        return favoriteRepository.findByUserIdWithPlace(user.getId()).stream()
                 .map(this::toResponse)
                 .toList();
     }
@@ -54,6 +54,11 @@ public class FavoriteService {
         Favorite favorite = favoriteRepository.findByUserIdAndPlaceId(user.getId(), placeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Локация не найдена в избранном"));
         favoriteRepository.delete(favorite);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean isFavorite(User user, Long placeId) {
+        return favoriteRepository.existsByUserIdAndPlaceId(user.getId(), placeId);
     }
 
     private FavoriteResponse toResponse(Favorite favorite) {

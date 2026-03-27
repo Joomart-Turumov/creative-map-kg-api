@@ -22,4 +22,6 @@ public class EventResponse {
     private LocalDateTime endDate;
     private boolean free;
     private String category;
+    private boolean active;
+    private LocalDateTime updatedAt;
 }

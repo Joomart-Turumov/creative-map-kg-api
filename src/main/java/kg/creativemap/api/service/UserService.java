@@ -1,5 +1,6 @@
 package kg.creativemap.api.service;
 
+import kg.creativemap.api.dto.request.UpdateSettingsRequest;
 import kg.creativemap.api.dto.request.UpdateUserRequest;
 import kg.creativemap.api.dto.response.UserResponse;
 import kg.creativemap.api.entity.User;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserService {
 
     private final UserRepository userRepository;
@@ -31,6 +33,27 @@ public class UserService {
         }
         if (request.getAvatarUrl() != null) {
             user.setAvatarUrl(request.getAvatarUrl());
+        }
+        userRepository.save(user);
+        return userMapper.toResponse(user);
+    }
+
+    @Transactional
+    public UserResponse updateSettings(User user, UpdateSettingsRequest request) {
+        if (request.getAccentColor() != null) {
+            user.setAccentColor(request.getAccentColor());
+        }
+        if (request.getLanguage() != null) {
+            user.setLanguage(request.getLanguage());
+        }
+        if (request.getDarkTheme() != null) {
+            user.setDarkTheme(request.getDarkTheme());
+        }
+        if (request.getPushNotifications() != null) {
+            user.setPushNotifications(request.getPushNotifications());
+        }
+        if (request.getEmailNotifications() != null) {
+            user.setEmailNotifications(request.getEmailNotifications());
         }
         userRepository.save(user);
         return userMapper.toResponse(user);

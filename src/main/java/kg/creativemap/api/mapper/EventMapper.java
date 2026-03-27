@@ -23,6 +23,8 @@ public class EventMapper {
                 .endDate(event.getEndDate())
                 .free(event.getFree() != null && event.getFree())
                 .category(event.getCategory() != null ? event.getCategory().name().toLowerCase() : "museum")
+                .active(event.getActive() != null ? event.getActive() : true)
+                .updatedAt(event.getUpdatedAt())
                 .build();
     }
 }

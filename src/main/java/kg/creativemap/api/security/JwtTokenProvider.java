@@ -2,12 +2,14 @@ package kg.creativemap.api.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import kg.creativemap.api.entity.Role;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Base64;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class JwtTokenProvider {
@@ -28,6 +30,19 @@ public class JwtTokenProvider {
     public String generateAccessToken(String email) {
         return Jwts.builder()
                 .subject(email)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + accessTokenExpiration))
+                .signWith(key)
+                .compact();
+    }
+
+    public String generateAccessToken(String email, Role role) {
+        List<String> permissions = role.getPermissions();
+        return Jwts.builder()
+                .subject(email)
+                .claim("role", role.name())
+                .claim("permissions", permissions)
+                .claim("defaultLanguage", role.getDefaultLanguage())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + accessTokenExpiration))
                 .signWith(key)

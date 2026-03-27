@@ -1,6 +1,5 @@
 package kg.creativemap.api.dto.request;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -10,9 +9,9 @@ import lombok.*;
 @AllArgsConstructor
 public class LoginRequest {
 
-    @NotBlank(message = "Email обязателен")
-    @Email(message = "Некорректный формат email")
     private String email;
+
+    private String cardNumber;
 
     @NotBlank(message = "Пароль обязателен")
     private String password;

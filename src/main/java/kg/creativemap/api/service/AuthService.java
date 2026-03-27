@@ -51,11 +51,20 @@ public class AuthService {
 
     @Transactional
     public AuthResponse login(LoginRequest request) {
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new BadCredentialsException("Неверный email или пароль"));
+        User user;
+
+        if (request.getCardNumber() != null && !request.getCardNumber().isBlank()) {
+            user = userRepository.findByCardNumber(request.getCardNumber())
+                    .orElseThrow(() -> new BadCredentialsException("Неверный номер карты или пароль"));
+        } else if (request.getEmail() != null && !request.getEmail().isBlank()) {
+            user = userRepository.findByEmail(request.getEmail())
+                    .orElseThrow(() -> new BadCredentialsException("Неверный email или пароль"));
+        } else {
+            throw new BadCredentialsException("Укажите номер карты или email");
+        }
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new BadCredentialsException("Неверный email или пароль");
+            throw new BadCredentialsException("Неверный номер карты или пароль");
         }
 
         if (!user.getActive()) {
@@ -88,7 +97,7 @@ public class AuthService {
     }
 
     private AuthResponse generateTokenPair(User user) {
-        String accessToken = jwtTokenProvider.generateAccessToken(user.getEmail());
+        String accessToken = jwtTokenProvider.generateAccessToken(user.getEmail(), user.getRole());
         String refreshTokenStr = jwtTokenProvider.generateRefreshToken(user.getEmail());
 
         RefreshToken refreshToken = RefreshToken.builder()

@@ -25,3 +25,7 @@ app:
     refresh-token-expiration: 604800000
   cors:
     allowed-origins: http://localhost:3001,http://localhost:3002,http://localhost:3003
+  swagger:
+    enabled: true
+  h2-console:
+    enabled: true
