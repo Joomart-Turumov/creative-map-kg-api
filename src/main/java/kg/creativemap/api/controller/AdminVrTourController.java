@@ -27,10 +27,11 @@ public class AdminVrTourController {
     public ResponseEntity<ApiResponse<PageResponse<VrTourResponse>>> getAllTours(
             @AuthenticationPrincipal User user,
             @RequestParam(defaultValue = "") String search,
+            @RequestParam(defaultValue = "") String status,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
         requireMinRole(user, Role.CONTENT_MAKER);
-        PageResponse<VrTourResponse> response = vrTourService.getAllTours(search, page, size);
+        PageResponse<VrTourResponse> response = vrTourService.getAllTours(search, status, page, size);
         return ResponseEntity.ok(ApiResponse.ok(response));
     }
 

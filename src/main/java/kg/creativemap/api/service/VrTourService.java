@@ -54,11 +54,19 @@ public class VrTourService {
     }
 
     @Transactional(readOnly = true)
-    public PageResponse<VrTourResponse> getAllTours(String search, int page, int size) {
+    public PageResponse<VrTourResponse> getAllTours(String search, String status, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
+        boolean hasSearch = search != null && !search.isBlank();
+        VrTourStatus filterStatus = parseFilterStatus(status); // null = все статусы
+        String q = hasSearch ? search.trim() : null;
+
         Page<VrTour> tourPage;
-        if (search != null && !search.isBlank()) {
-            tourPage = vrTourRepository.search(search.trim(), pageable);
+        if (filterStatus != null && hasSearch) {
+            tourPage = vrTourRepository.searchByStatus(q, filterStatus, pageable);
+        } else if (filterStatus != null) {
+            tourPage = vrTourRepository.findByStatusOrderByCreatedAtDesc(filterStatus, pageable);
+        } else if (hasSearch) {
+            tourPage = vrTourRepository.search(q, pageable);
         } else {
             tourPage = vrTourRepository.findAllByOrderByCreatedAtDesc(pageable);
         }
@@ -66,6 +74,16 @@ public class VrTourService {
                 .map(vrTourMapper::toResponse)
                 .toList();
         return PageResponse.of(tourPage, content);
+    }
+
+    /** Статус-фильтр для списка: пусто/ALL/неизвестное → null (без фильтра). */
+    private VrTourStatus parseFilterStatus(String status) {
+        if (status == null || status.isBlank() || status.equalsIgnoreCase("ALL")) return null;
+        try {
+            return VrTourStatus.valueOf(status.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
     }
 
     @Transactional
