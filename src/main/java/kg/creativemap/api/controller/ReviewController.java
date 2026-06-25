@@ -38,6 +38,15 @@ public class ReviewController {
         return ResponseEntity.ok(ApiResponse.ok(stats));
     }
 
+    @GetMapping("/my")
+    public ResponseEntity<ApiResponse<PageResponse<ReviewResponse>>> getMyReviews(
+            @AuthenticationPrincipal User user,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        PageResponse<ReviewResponse> reviews = reviewService.getMyReviews(user, page, size);
+        return ResponseEntity.ok(ApiResponse.ok(reviews));
+    }
+
     @GetMapping("/my/place/{placeId}")
     public ResponseEntity<ApiResponse<ReviewResponse>> getMyReview(
             @AuthenticationPrincipal User user,

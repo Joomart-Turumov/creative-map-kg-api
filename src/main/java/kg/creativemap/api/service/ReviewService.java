@@ -34,6 +34,12 @@ public class ReviewService {
     }
 
     @Transactional(readOnly = true)
+    public PageResponse<ReviewResponse> getMyReviews(User user, int page, int size) {
+        Page<Review> reviews = reviewRepository.findByUserIdWithPlace(user.getId(), PageRequest.of(page, size));
+        return PageResponse.of(reviews, reviews.getContent().stream().map(reviewMapper::toResponse).toList());
+    }
+
+    @Transactional(readOnly = true)
     public ReviewStatsResponse getStats(Long placeId) {
         return ReviewStatsResponse.builder()
                 .averageRating(reviewRepository.getAverageRatingByPlaceId(placeId))

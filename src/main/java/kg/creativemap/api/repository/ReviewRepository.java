@@ -15,6 +15,9 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Query("SELECT r FROM Review r JOIN FETCH r.user JOIN FETCH r.place WHERE r.place.id = :placeId ORDER BY r.createdAt DESC")
     Page<Review> findByPlaceIdWithUser(Long placeId, Pageable pageable);
 
+    @Query("SELECT r FROM Review r JOIN FETCH r.user JOIN FETCH r.place WHERE r.user.id = :userId ORDER BY r.createdAt DESC")
+    Page<Review> findByUserIdWithPlace(Long userId, Pageable pageable);
+
     Optional<Review> findByUserIdAndPlaceId(Long userId, Long placeId);
 
     boolean existsByUserIdAndPlaceId(Long userId, Long placeId);
