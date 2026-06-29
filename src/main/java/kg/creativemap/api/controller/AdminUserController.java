@@ -34,7 +34,7 @@ public class AdminUserController {
             @RequestParam(defaultValue = "") String search,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
-        requireMinRole(user, Role.ADMIN);
+        requirePermission(user, "MANAGE_USERS");
         PageResponse<UserResponse> response = adminUserService.getUsers(user, search, page, size);
         return ResponseEntity.ok(ApiResponse.ok(response));
     }
@@ -43,7 +43,7 @@ public class AdminUserController {
     public ResponseEntity<ApiResponse<UserResponse>> createUser(
             @AuthenticationPrincipal User user,
             @Valid @RequestBody CreateUserRequest request) {
-        requireMinRole(user, Role.ADMIN);
+        requirePermission(user, "MANAGE_USERS");
         UserResponse response = adminUserService.createUser(user, request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.ok(response, "Пользователь создан"));
@@ -54,7 +54,7 @@ public class AdminUserController {
             @AuthenticationPrincipal User user,
             @PathVariable Long id,
             @Valid @RequestBody UpdateUserAdminRequest request) {
-        requireMinRole(user, Role.ADMIN);
+        requirePermission(user, "MANAGE_USERS");
         UserResponse response = adminUserService.updateUser(user, id, request);
         return ResponseEntity.ok(ApiResponse.ok(response, "Пользователь обновлён"));
     }
@@ -63,7 +63,7 @@ public class AdminUserController {
     public ResponseEntity<ApiResponse<Void>> deleteUser(
             @AuthenticationPrincipal User user,
             @PathVariable Long id) {
-        requireMinRole(user, Role.ADMIN);
+        requirePermission(user, "MANAGE_USERS");
         adminUserService.deleteUser(user, id);
         return ResponseEntity.ok(ApiResponse.ok(null, "Пользователь удалён"));
     }
@@ -72,7 +72,7 @@ public class AdminUserController {
     public ResponseEntity<ApiResponse<UserResponse>> blockUser(
             @AuthenticationPrincipal User user,
             @PathVariable Long id) {
-        requireMinRole(user, Role.ADMIN);
+        requirePermission(user, "MANAGE_USERS");
         UpdateUserAdminRequest request = new UpdateUserAdminRequest();
         request.setActive(false);
         UserResponse response = adminUserService.updateUser(user, id, request);
@@ -83,7 +83,7 @@ public class AdminUserController {
     public ResponseEntity<ApiResponse<UserResponse>> unblockUser(
             @AuthenticationPrincipal User user,
             @PathVariable Long id) {
-        requireMinRole(user, Role.ADMIN);
+        requirePermission(user, "MANAGE_USERS");
         UpdateUserAdminRequest request = new UpdateUserAdminRequest();
         request.setActive(true);
         UserResponse response = adminUserService.updateUser(user, id, request);
@@ -93,7 +93,7 @@ public class AdminUserController {
     @GetMapping("/roles")
     public ResponseEntity<ApiResponse<List<Map<String, Object>>>> getRoles(
             @AuthenticationPrincipal User user) {
-        requireMinRole(user, Role.ADMIN);
+        requirePermission(user, "MANAGE_USERS");
         List<Map<String, Object>> roles = Arrays.stream(Role.values())
                 .map(role -> {
                     Map<String, Object> info = new LinkedHashMap<>();
@@ -107,8 +107,8 @@ public class AdminUserController {
         return ResponseEntity.ok(ApiResponse.ok(roles));
     }
 
-    private void requireMinRole(User user, Role minRole) {
-        if (!user.getRole().isAboveOrEqual(minRole)) {
+    private void requirePermission(User user, String permission) {
+        if (!user.getRole().hasPermission(permission)) {
             throw new AccessDeniedException("Недостаточно прав");
         }
     }

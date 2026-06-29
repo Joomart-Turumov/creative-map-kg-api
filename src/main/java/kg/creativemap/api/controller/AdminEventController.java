@@ -6,7 +6,6 @@ import kg.creativemap.api.dto.request.UpdateEventRequest;
 import kg.creativemap.api.dto.response.ApiResponse;
 import kg.creativemap.api.dto.response.EventResponse;
 import kg.creativemap.api.dto.response.PageResponse;
-import kg.creativemap.api.entity.Role;
 import kg.creativemap.api.entity.User;
 import kg.creativemap.api.service.AdminEventService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +28,7 @@ public class AdminEventController {
             @RequestParam(defaultValue = "") String search,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
-        requireMinRole(user, Role.CONTENT_MAKER);
+        requirePermission(user, "MANAGE_EVENTS");
         PageResponse<EventResponse> response = adminEventService.getAllEvents(search, page, size);
         return ResponseEntity.ok(ApiResponse.ok(response));
     }
@@ -38,7 +37,7 @@ public class AdminEventController {
     public ResponseEntity<ApiResponse<EventResponse>> createEvent(
             @AuthenticationPrincipal User user,
             @Valid @RequestBody CreateEventRequest request) {
-        requireMinRole(user, Role.CONTENT_MAKER);
+        requirePermission(user, "MANAGE_EVENTS");
         EventResponse response = adminEventService.createEvent(user, request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.ok(response, "Мероприятие создано"));
@@ -49,7 +48,7 @@ public class AdminEventController {
             @AuthenticationPrincipal User user,
             @PathVariable Long id,
             @Valid @RequestBody UpdateEventRequest request) {
-        requireMinRole(user, Role.CONTENT_MAKER);
+        requirePermission(user, "MANAGE_EVENTS");
         EventResponse response = adminEventService.updateEvent(user, id, request);
         return ResponseEntity.ok(ApiResponse.ok(response, "Мероприятие обновлено"));
     }
@@ -58,7 +57,7 @@ public class AdminEventController {
     public ResponseEntity<ApiResponse<Void>> deleteEvent(
             @AuthenticationPrincipal User user,
             @PathVariable Long id) {
-        requireMinRole(user, Role.CONTENT_MAKER);
+        requirePermission(user, "MANAGE_EVENTS");
         adminEventService.deleteEvent(user, id);
         return ResponseEntity.ok(ApiResponse.ok(null, "Мероприятие удалено"));
     }
@@ -67,13 +66,13 @@ public class AdminEventController {
     public ResponseEntity<ApiResponse<EventResponse>> toggleStatus(
             @AuthenticationPrincipal User user,
             @PathVariable Long id) {
-        requireMinRole(user, Role.CONTENT_MAKER);
+        requirePermission(user, "MANAGE_EVENTS");
         EventResponse response = adminEventService.toggleStatus(user, id);
         return ResponseEntity.ok(ApiResponse.ok(response, "Статус изменён"));
     }
 
-    private void requireMinRole(User user, Role minRole) {
-        if (!user.getRole().isAboveOrEqual(minRole)) {
+    private void requirePermission(User user, String permission) {
+        if (!user.getRole().hasPermission(permission)) {
             throw new AccessDeniedException("Недостаточно прав");
         }
     }

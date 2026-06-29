@@ -19,7 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,7 +59,7 @@ public class AdminUserService {
             throw new AccessDeniedException("Невозможно создать супер-администратора");
         }
 
-        if (!currentUser.getRole().isAbove(targetRole)) {
+        if (!currentUser.getRole().canManage(targetRole)) {
             throw new AccessDeniedException("Недостаточно прав для создания пользователя с данной ролью");
         }
 
@@ -105,7 +105,7 @@ public class AdminUserService {
             if (newRole == Role.SUPER_ADMIN) {
                 throw new AccessDeniedException("Невозможно назначить роль супер-администратора");
             }
-            if (!currentUser.getRole().isAbove(newRole)) {
+            if (!currentUser.getRole().canManage(newRole)) {
                 throw new AccessDeniedException("Недостаточно прав для назначения данной роли");
             }
             target.setRole(newRole);
@@ -146,14 +146,12 @@ public class AdminUserService {
         if (target.getRole() == Role.SUPER_ADMIN) {
             throw new AccessDeniedException("Невозможно управлять супер-администратором");
         }
-        if (!currentUser.getRole().isAbove(target.getRole())) {
+        if (!currentUser.getRole().canManage(target.getRole())) {
             throw new AccessDeniedException("Недостаточно прав для управления этим пользователем");
         }
     }
 
     private List<Role> getVisibleRoles(Role currentRole) {
-        return Arrays.stream(Role.values())
-                .filter(r -> currentRole.isAbove(r))
-                .collect(Collectors.toList());
+        return new ArrayList<>(currentRole.manageableRoles());
     }
 }

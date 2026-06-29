@@ -5,7 +5,6 @@ import kg.creativemap.api.dto.request.CreatePlaceRequest;
 import kg.creativemap.api.dto.request.UpdatePlaceRequest;
 import kg.creativemap.api.dto.response.ApiResponse;
 import kg.creativemap.api.dto.response.PlaceResponse;
-import kg.creativemap.api.entity.Role;
 import kg.creativemap.api.entity.User;
 import kg.creativemap.api.service.AdminPlaceService;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +25,7 @@ public class AdminPlaceController {
     public ResponseEntity<ApiResponse<PlaceResponse>> createPlace(
             @AuthenticationPrincipal User user,
             @Valid @RequestBody CreatePlaceRequest request) {
-        requireMinRole(user, Role.CONTENT_MAKER);
+        requirePermission(user, "MANAGE_CONTENT");
         PlaceResponse response = adminPlaceService.createPlace(user, request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.ok(response, "Место создано"));
@@ -37,7 +36,7 @@ public class AdminPlaceController {
             @AuthenticationPrincipal User user,
             @PathVariable Long id,
             @Valid @RequestBody UpdatePlaceRequest request) {
-        requireMinRole(user, Role.CONTENT_MAKER);
+        requirePermission(user, "MANAGE_CONTENT");
         PlaceResponse response = adminPlaceService.updatePlace(user, id, request);
         return ResponseEntity.ok(ApiResponse.ok(response, "Место обновлено"));
     }
@@ -46,13 +45,13 @@ public class AdminPlaceController {
     public ResponseEntity<ApiResponse<Void>> deletePlace(
             @AuthenticationPrincipal User user,
             @PathVariable Long id) {
-        requireMinRole(user, Role.CONTENT_MAKER);
+        requirePermission(user, "MANAGE_CONTENT");
         adminPlaceService.deletePlace(user, id);
         return ResponseEntity.ok(ApiResponse.ok(null, "Место удалено"));
     }
 
-    private void requireMinRole(User user, Role minRole) {
-        if (!user.getRole().isAboveOrEqual(minRole)) {
+    private void requirePermission(User user, String permission) {
+        if (!user.getRole().hasPermission(permission)) {
             throw new AccessDeniedException("Недостаточно прав");
         }
     }

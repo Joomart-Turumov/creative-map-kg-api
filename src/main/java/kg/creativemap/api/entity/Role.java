@@ -1,7 +1,9 @@
 package kg.creativemap.api.entity;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public enum Role {
     USER,
@@ -63,5 +65,27 @@ public enum Role {
                     "VIEW_CONTENT", "USE_FAVOURITES", "VIEW_HISTORY", "LEAVE_REVIEW"
             );
         };
+    }
+
+    /** Есть ли у роли конкретное право. Авторизация — по правам, а не по линейному уровню. */
+    public boolean hasPermission(String permission) {
+        return getPermissions().contains(permission);
+    }
+
+    /**
+     * Какими ролями может управлять (создание/назначение/блокировка/удаление).
+     * ADMIN и CONTENT_MAKER ортогональны: линейная иерархия неприменима, поэтому список явный.
+     */
+    public Set<Role> manageableRoles() {
+        return switch (this) {
+            case SUPER_ADMIN -> EnumSet.of(USER, FOREIGN_USER, CONTENT_MAKER, ADMIN);
+            case ADMIN -> EnumSet.of(USER, FOREIGN_USER, CONTENT_MAKER);
+            default -> EnumSet.noneOf(Role.class);
+        };
+    }
+
+    /** Может ли актор управлять пользователем с ролью target. */
+    public boolean canManage(Role target) {
+        return manageableRoles().contains(target);
     }
 }
